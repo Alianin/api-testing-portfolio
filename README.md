@@ -17,13 +17,14 @@ The Movie Database (TMDB) is a community-built movie and TV database. This colle
 - Date format validation (ISO 8601)
 - ID integrity checks
 - Duplicate detection
-- Pagination metadata validation
+- Pagination metadata validation (`page`, `total_pages`, `results` count, `total_results` consistency)
 - Content-Type header validation
 - Response time assertion
 
 ## Design decisions
 - The schemas were designed from actual response data, not just documentation.
 - Null handling was added based on observed API behavior vs documented behavior.
+- Sort order validation was investigated but not implemented. TMDB's popularity scores update in real time, meaning the sort order of a given page can shift between requests. Due to this inconsistency, a test written against this behavior would pass or fail at different times based on the data state. I decided to document this limitation instead of including a test that provides no reliable signal.
 
 ## Findings during development
 These findings were identified during schema design by comparing official documentation against actual API responses.
