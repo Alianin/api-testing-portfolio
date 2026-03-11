@@ -4,22 +4,24 @@ This project was created to demonstrate my API testing skills using a real publi
 ## Attribution
 This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.
 
+## Files
+- `tmdb-api-tests.json` — Postman collection (v2.1)
+  
 ## The API
 The Movie Database (TMDB) is a community-built movie and TV database. This collection tests the following endpoints:
 - https://api.themoviedb.org/3/movie/popular - returns a paginated list of popular movies
 - https://api.themoviedb.org/3/tv/popular - returns a paginated list of popular TV shows
 
 ## What the collection tests
+- Status code and Content-Type header validation
+- Response time assertion
 - Schema validation with AJV across movie and TV list endpoints
 - Range validation on numeric fields (`vote_average` 0-10, `popularity`, `vote_count`)
 - Array item type validation (`genre_ids`, `origin_country`)
 - Null handling on fields with known undocumented behavior (`backdrop_path`, `poster_path`)
 - Date format validation (ISO 8601)
-- ID integrity checks
-- Duplicate detection
+- ID integrity checks - type and range validation via schema (integer, minimum value of 1) and duplicate detection across result sets
 - Pagination metadata validation (`page`, `total_pages`, `results` count, `total_results` consistency)
-- Content-Type header validation
-- Response time assertion
 
 ## Design decisions
 - The schemas were designed from actual response data, not just documentation.
