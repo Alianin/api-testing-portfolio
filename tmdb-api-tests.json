@@ -127,14 +127,14 @@
               "\t\trequired: [\"adult\", \"id\", \"original_language\", \"original_title\", \"overview\", \"popularity\", \"release_date\", \"title\", \"video\", \"vote_average\", \"vote_count\"],\r",
               "\t\tproperties: {\r",
               "            adult: {type: \"boolean\"},\r",
-              "            backdrop_path: {type: [\"string\", \"null\"]}, // not documented to allow null, but an observed response\r",
+              "            backdrop_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
               "            genre_ids: {type: \"array\", items: {type: \"integer\"}},\r",
               "\t\t\tid: {type: \"integer\", minimum: 1},\r",
               "            original_language: {type: \"string\"},\r",
               "            original_title: {type: \"string\", minLength: 1},\r",
               "            overview: {type: \"string\"},\r",
               "            popularity: {type: \"number\", minimum: 0},\r",
-              "            poster_path: {type: [\"string\", \"null\"]}, // not documented to allow null, but an observed response\r",
+              "            poster_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
               "            release_date: {type: \"string\"},\r",
               "            title: {type: \"string\", minLength: 1},\r",
               "            video: {type: \"boolean\"},\r",
@@ -147,7 +147,7 @@
               "\t\trequired: [\"adult\", \"id\", \"origin_country\", \"original_language\", \"original_name\", \"overview\", \"popularity\", \"first_air_date\", \"name\", \"vote_average\", \"vote_count\"],\r",
               "\t\tproperties: {\r",
               "            adult: {type: \"boolean\"},\r",
-              "            backdrop_path: {type: [\"string\", \"null\"]}, // not documented to allow null, but an observed response\r",
+              "            backdrop_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
               "            genre_ids: {type: \"array\", items: {type: \"integer\"}},\r",
               "\t\t\tid: {type: \"integer\", minimum: 1},\r",
               "            origin_country: {type: \"array\", items: {type: \"string\"}, minItems: 1},\r",
@@ -155,7 +155,7 @@
               "            original_name: {type: \"string\", minLength: 1},\r",
               "            overview: {type: \"string\"},\r",
               "            popularity: {type: \"number\", minimum: 0},\r",
-              "            poster_path: {type: [\"string\", \"null\"]}, // not documented to allow null, but an observed response\r",
+              "            poster_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
               "            first_air_date: {type: \"string\"},\r",
               "            name: {type: \"string\", minLength: 1},\r",
               "            vote_average: {type: \"number\", minimum: 0, maximum: 10},\r",
@@ -796,7 +796,330 @@
     },
     {
       "name": "Search",
-      "item": []
+      "item": [
+        {
+          "name": "Movie search",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.variables.set(\"searchName\", \"movie\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.themoviedb.org/3/search/movie?query=the",
+              "protocol": "https",
+              "host": [
+                "api",
+                "themoviedb",
+                "org"
+              ],
+              "path": [
+                "3",
+                "search",
+                "movie"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "the"
+                }
+              ]
+            },
+            "description": "Returns a list of movies that match the query string. Validates schema, pagination metadata, date formats, and duplicate IDs.\n\nAPI docs: [https://developer.themoviedb.org/reference/search-movie](https://developer.themoviedb.org/reference/search-movie)"
+          },
+          "response": []
+        },
+        {
+          "name": "TV search",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.variables.set(\"searchName\", \"tv\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.themoviedb.org/3/search/tv?query=the",
+              "protocol": "https",
+              "host": [
+                "api",
+                "themoviedb",
+                "org"
+              ],
+              "path": [
+                "3",
+                "search",
+                "tv"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "the"
+                }
+              ]
+            },
+            "description": "Returns a list of TV shows that match the query string. Validates schema, pagination metadata, date formats, and duplicate IDs.\n\nAPI docs: [https://developer.themoviedb.org/reference/search-tv](https://developer.themoviedb.org/reference/search-tv)"
+          },
+          "response": []
+        },
+        {
+          "name": "No results",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.variables.set(\"searchName\", \"noResults\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.themoviedb.org/3/search/movie?query=lsadkfjaso",
+              "protocol": "https",
+              "host": [
+                "api",
+                "themoviedb",
+                "org"
+              ],
+              "path": [
+                "3",
+                "search",
+                "movie"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "lsadkfjaso"
+                }
+              ]
+            },
+            "description": "Validates the empty result response returned when no matches are found. Confirms results array, total results, and pagination metadata all reflect a zero-result state."
+          },
+          "response": []
+        }
+      ],
+      "description": "Tests the movie and TV search endpoints covering schema validation, pagination metadata, date format, duplicate detection, response time, and a no results edge case.",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "const Ajv = require('ajv');\r",
+              "const ajv = new Ajv({ allErrors: true });\r",
+              "\r",
+              "// -----------------------------\r",
+              "// SEARCH SCHEMA DEFINITIONS\r",
+              "// -----------------------------\r",
+              "const searchSchemas = {\r",
+              "\tmovie: {\r",
+              "\t\ttype: \"object\",\r",
+              "\t\trequired: [\"adult\", \"id\", \"original_language\", \"original_title\", \"overview\", \"popularity\", \"release_date\", \"title\", \"video\", \"vote_average\", \"vote_count\"],\r",
+              "\t\tproperties: {\r",
+              "            adult: {type: \"boolean\"},\r",
+              "            backdrop_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
+              "            genre_ids: {type: \"array\", items: {type: \"integer\"}},\r",
+              "\t\t\tid: {type: \"integer\", minimum: 1},\r",
+              "            original_language: {type: \"string\"},\r",
+              "            original_title: {type: \"string\", minLength: 1},\r",
+              "            overview: {type: \"string\"},\r",
+              "            popularity: {type: \"number\", minimum: 0},\r",
+              "            poster_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
+              "            release_date: {type: \"string\"},\r",
+              "            title: {type: \"string\", minLength: 1},\r",
+              "            video: {type: \"boolean\"},\r",
+              "            vote_average: {type: \"number\", minimum: 0, maximum: 10},\r",
+              "            vote_count: {type: \"integer\", minimum: 0}\r",
+              "\t\t}\r",
+              "\t},\r",
+              "    tv: {\r",
+              "\t\ttype: \"object\",\r",
+              "\t\trequired: [\"adult\", \"id\", \"origin_country\", \"original_language\", \"original_name\", \"overview\", \"popularity\", \"first_air_date\", \"name\", \"vote_average\", \"vote_count\"],\r",
+              "\t\tproperties: {\r",
+              "            adult: {type: \"boolean\"},\r",
+              "            backdrop_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
+              "            genre_ids: {type: \"array\", items: {type: \"integer\"}},\r",
+              "\t\t\tid: {type: \"integer\", minimum: 1},\r",
+              "            origin_country: {type: \"array\", items: {type: \"string\"}, minItems: 1},\r",
+              "            original_language: {type: \"string\"},\r",
+              "            original_name: {type: \"string\", minLength: 1},\r",
+              "            overview: {type: \"string\"},\r",
+              "            popularity: {type: \"number\", minimum: 0},\r",
+              "            poster_path: {type: [\"string\", \"null\"]}, // Not documented to allow null, but an observed response\r",
+              "            first_air_date: {type: \"string\"},\r",
+              "            name: {type: \"string\", minLength: 1},\r",
+              "            vote_average: {type: \"number\", minimum: 0, maximum: 10},\r",
+              "            vote_count: {type: \"integer\", minimum: 0}\r",
+              "\t\t}\r",
+              "\t}\r",
+              "}\r",
+              "\r",
+              "// -----------------------------\r",
+              "// DETERMINE SEARCH TYPE\r",
+              "// -----------------------------\r",
+              "const searchName = pm.variables.get(\"searchName\");\r",
+              "let validateResult;\r",
+              "\r",
+              "if (searchName !== \"noResults\") {\r",
+              "    if (!searchSchemas[searchName]) {\r",
+              "        throw new Error(`No schema defined for search \"${searchName}\"`);\r",
+              "    }\r",
+              "\r",
+              "    const searchSchema = searchSchemas[searchName];\r",
+              "    validateResult = ajv.compile(searchSchema);\r",
+              "}\r",
+              "\r",
+              "// -----------------------------\r",
+              "// PARSE RESPONSE\r",
+              "// -----------------------------\r",
+              "const jsonData = pm.response.json();\r",
+              "const dataResults = jsonData.results || [];\r",
+              "\r",
+              "// -----------------------------\r",
+              "// TRACKING & REGEX VARIABLES\r",
+              "// -----------------------------\r",
+              "let totalResults = dataResults.length;\r",
+              "let schemaFailures = [];\r",
+              "let dateFailures = [];\r",
+              "let duplicateIds = [];\r",
+              "let idsSeen = new Set();\r",
+              "\r",
+              "const iso8601Regex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+              "\r",
+              "// -----------------------------\r",
+              "// VALIDATION LOOP\r",
+              "// -----------------------------\r",
+              "if (searchName !== \"noResults\") {\r",
+              "    dataResults.forEach(result => {\r",
+              "\r",
+              "        // Schema checks\r",
+              "        const validSchema = validateResult(result);\r",
+              "        if (!validSchema) {\r",
+              "            schemaFailures.push({\r",
+              "                id: result.id,\r",
+              "                errors: validateResult.errors\r",
+              "            });\r",
+              "        }\r",
+              "\r",
+              "        // Date validation\r",
+              "        [\"release_date\", \"first_air_date\"].forEach(field => {\r",
+              "            if (result[field] && !iso8601Regex.test(result[field])) {\r",
+              "                dateFailures.push(`${result.id} - ${field}: ${result[field]}`);\r",
+              "            }\r",
+              "        });\r",
+              "\r",
+              "        // Duplicate detection\r",
+              "        if (idsSeen.has(result.id)) {\r",
+              "            duplicateIds.push(result.id);\r",
+              "        }\r",
+              "\r",
+              "        idsSeen.add(result.id);\r",
+              "    });\r",
+              "}\r",
+              "\r",
+              "// -----------------------------\r",
+              "// TESTS\r",
+              "// -----------------------------\r",
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"Response is JSON\", () => {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+              "});\r",
+              "pm.test(\"Page defaults to 1\", () => {\r",
+              "    pm.expect(jsonData.page).to.eql(1);\r",
+              "});\r",
+              "if (searchName === \"noResults\") {\r",
+              "    pm.test(\"Total pages is 1\", () => {\r",
+              "        pm.expect(jsonData.total_pages).to.eql(1);\r",
+              "    });\r",
+              "    pm.test(\"Response contains no results\", () => {\r",
+              "        pm.expect(jsonData.results.length).to.eql(0);\r",
+              "    });\r",
+              "    pm.test(\"Total results is zero\", () => {\r",
+              "        pm.expect(jsonData.total_results).to.eql(0);\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"Total pages is greater than zero\", () => {\r",
+              "        pm.expect(jsonData.total_pages).to.be.above(0);\r",
+              "    });\r",
+              "    pm.test(\"Response contains results\", () => {\r",
+              "        pm.expect(jsonData.results.length).to.be.above(0);\r",
+              "    });\r",
+              "    pm.test(\"Total results is greater than zero\", () => {\r",
+              "        pm.expect(jsonData.total_results).to.be.above(0);\r",
+              "    });\r",
+              "    pm.test(\"No duplicate IDs in search results\", () => {\r",
+              "        pm.expect(duplicateIds.length).to.eql(0);\r",
+              "    });\r",
+              "    pm.test(\"All objects match expected schema\", () => {\r",
+              "        const failureSummary = schemaFailures.map(f =>\r",
+              "        `ID ${f.id}: ${f.errors.map(e => e.message).join(\",\")}`\r",
+              "        ).join(\" | \");\r",
+              "        pm.expect(schemaFailures.length, failureSummary).to.eql(0);\r",
+              "    });\r",
+              "    pm.test(\"All date fields are valid ISO 8601 format\", () => {\r",
+              "        pm.expect(dateFailures.length).to.eql(0);\r",
+              "    });\r",
+              "}\r",
+              "pm.test(\"Total results is greater than or equal to results\", () => {\r",
+              "    pm.expect(jsonData.total_results).to.be.gte(jsonData.results.length);\r",
+              "});\r",
+              "pm.test(\"Response time is acceptable\", () => {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "// -----------------------------\r",
+              "// DEBUG LOGGING\r",
+              "// -----------------------------\r",
+              "console.log(`Search test summary for ${searchName}`);\r",
+              "console.log(\"Results:\", totalResults);\r",
+              "console.log(\"Schema failures:\", schemaFailures);\r",
+              "console.log(\"Date failures\", dateFailures);\r",
+              "console.log(\"Duplicate IDs:\", duplicateIds);"
+            ]
+          }
+        }
+      ]
     }
   ],
   "auth": {
