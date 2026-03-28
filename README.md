@@ -93,6 +93,9 @@ These findings were identified during schema design by comparing official docume
 ### Search
 - Search results total is capped at 10,000, regardless of actual matches. This appears to be an intentional API limitation rather than a bug.
 
+## Test results
+![Collection runner results](screenshots/runner-results.png)
+
 ## How to run
 1. Register for a free TMDB API key by creating an account at https://www.themoviedb.org/signup and then going to https://www.themoviedb.org/settings/api.
 2. Import the collection into Postman.
