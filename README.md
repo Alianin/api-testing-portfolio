@@ -8,12 +8,14 @@ This product uses TMDB and the TMDB APIs but is not endorsed, certified, or othe
 - `tmdb-api-tests.json` - Postman collection (v2.1)
 
 ## Collection structure
+- **Authentication** - validates successful and unsuccessful authentication.
 - **Popular lists** - validates movie and TV popular list endpoints.
 - **Page detail** - validates movie and TV detail endpoints, chained from list results.
 - **Search** - validates move and TV search endpoints, including a no-results case.
 
 ## The API
 The Movie Database (TMDB) is a community-built movie and TV database. This collection tests the following endpoints:
+- https://api.themoviedb.org/3/authentication - validates the current access token.
 - https://api.themoviedb.org/3/movie/popular - returns a paginated list of popular movies.
 - https://api.themoviedb.org/3/tv/popular - returns a paginated list of popular TV shows.
 - https://api.themoviedb.org/3/movie/{movie_id} - returns the details of a movie.
@@ -22,6 +24,12 @@ The Movie Database (TMDB) is a community-built movie and TV database. This colle
 - https://api.themoviedb.org/3/search/tv - searches TV shows by query string.
 
 ## What the collection tests
+### Authentication
+- Schema validation with AJV on the authentication response.
+- Success state validation for valid and invalid credentials.
+- Status code validation for both authorized and unauthorized responses.
+- Content-Type header and response time validation.
+
 ### Popular lists
 - Schema validation with AJV on movie and TV list results.
 - Range validation on numeric fields.
@@ -66,6 +74,9 @@ The Movie Database (TMDB) is a community-built movie and TV database. This colle
 
 ## Findings during development
 These findings were identified during schema design by comparing official documentation against actual API responses.
+
+### Authentication
+- `status_code` and `status_message` are documented as returned fields for both 200 and 401 responses, but are absent from the 401 response. Only `success` is returned.
 
 ### TV popular list
 - The `adult` field is present in responses but missing from the official documentation.
