@@ -765,7 +765,8 @@
               "});\r",
               "if (isTv) {\r",
               "    pm.test(\"Number of seasons matches seasons list\", () => {\r",
-              "        pm.expect(jsonData.number_of_seasons).to.eql(jsonData.seasons.length);\r",
+              "        const specialsCount = jsonData.seasons.filter(s => s.season_number === 0).length;\r",
+              "        pm.expect(jsonData.number_of_seasons).to.eql(jsonData.seasons.length - specialsCount); // Number of seasons doesn't count specials\r",
               "    });\r",
               "    pm.test(\"Ended TV shows do not have a next episode\", () => {\r",
               "        if (!jsonData.in_production) {\r",
@@ -839,8 +840,7 @@
     },
     {
       "key": "tvId",
-      "value": "",
-      "type": "default"
+      "value": ""
     }
   ]
 }
