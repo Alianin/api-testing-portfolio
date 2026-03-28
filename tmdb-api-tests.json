@@ -9,6 +9,218 @@
   },
   "item": [
     {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Valid auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// -----------------------------\r",
+                  "// GET FOLDER VARIABLES\r",
+                  "// -----------------------------\r",
+                  "const jsonData = JSON.parse(pm.variables.get(\"jsonData\"));\r",
+                  "const schemaFailures = JSON.parse(pm.variables.get(\"schemaFailures\"));\r",
+                  "\r",
+                  "// -----------------------------\r",
+                  "// TESTS\r",
+                  "// -----------------------------\r",
+                  "pm.test(\"Status code is 200\", () => {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Response is JSON\", () => {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                  "});\r",
+                  "pm.test(\"All items match expected schema\", () => {\r",
+                  "    const failureSummary = schemaFailures.map(f =>\r",
+                  "    f.errors.map(e => e.message).join(\",\")\r",
+                  "    ).join(\" | \");\r",
+                  "    pm.expect(schemaFailures.length, failureSummary).to.eql(0);\r",
+                  "});\r",
+                  "pm.test(\"Success is true\", () => {\r",
+                  "    pm.expect(jsonData.success).to.eql(true);\r",
+                  "});\r",
+                  "pm.test(\"Response time is acceptable\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.themoviedb.org/3/authentication",
+              "protocol": "https",
+              "host": [
+                "api",
+                "themoviedb",
+                "org"
+              ],
+              "path": [
+                "3",
+                "authentication"
+              ]
+            },
+            "description": "Validates that a valid access token is accepted and returns a success response.\n\nAPI docs: [https://developer.themoviedb.org/reference/authentication-validate-key](https://developer.themoviedb.org/reference/authentication-validate-key)"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid auth",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.request.headers.upsert({\r",
+                  "    key: \"Authorization\",\r",
+                  "    value: \"Bearer invalid_token\"\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// -----------------------------\r",
+                  "// GET FOLDER VARIABLES\r",
+                  "// -----------------------------\r",
+                  "const jsonData = JSON.parse(pm.variables.get(\"jsonData\"));\r",
+                  "const schemaFailures = JSON.parse(pm.variables.get(\"schemaFailures\"));\r",
+                  "\r",
+                  "// -----------------------------\r",
+                  "// TESTS\r",
+                  "// -----------------------------\r",
+                  "pm.test(\"Status code is 401 Unauthorized\", () => {\r",
+                  "    pm.response.to.have.status(401);\r",
+                  "});\r",
+                  "pm.test(\"Response is JSON\", () => {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+                  "});\r",
+                  "pm.test(\"All items match expected schema\", () => {\r",
+                  "    const failureSummary = schemaFailures.map(f =>\r",
+                  "    f.errors.map(e => e.message).join(\",\")\r",
+                  "    ).join(\" | \");\r",
+                  "    pm.expect(schemaFailures.length, failureSummary).to.eql(0);\r",
+                  "});\r",
+                  "pm.test(\"Success is false\", () => {\r",
+                  "    pm.expect(jsonData.success).to.eql(false);\r",
+                  "});\r",
+                  "pm.test(\"Response time is acceptable\", () => {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://api.themoviedb.org/3/authentication",
+              "protocol": "https",
+              "host": [
+                "api",
+                "themoviedb",
+                "org"
+              ],
+              "path": [
+                "3",
+                "authentication"
+              ]
+            },
+            "description": "Validates that an invalid access token is rejected and returns an unauthorized response.\n\nAPI docs: [https://developer.themoviedb.org/reference/authentication-validate-key](https://developer.themoviedb.org/reference/authentication-validate-key)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Tests the authentication endpoint covering schema validation, success state, and response time for both valid and invalid credentials.",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "const Ajv = require('ajv');\r",
+              "const ajv = new Ajv({ allErrors: true });\r",
+              "\r",
+              "// -----------------------------\r",
+              "// AUTH SCHEMA DEFINITION\r",
+              "// -----------------------------\r",
+              "const authSchema = {\r",
+              "    type: \"object\",\r",
+              "    required: [\"success\"],\r",
+              "    properties: {\r",
+              "        success: {type: \"boolean\"}\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "// -----------------------------\r",
+              "// PARSE RESPONSE\r",
+              "// -----------------------------\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "// -----------------------------\r",
+              "// VALIDATION\r",
+              "// -----------------------------\r",
+              "const validateResult = ajv.compile(authSchema);\r",
+              "const validSchema = validateResult(jsonData);\r",
+              "\r",
+              "let schemaFailures = [];\r",
+              "\r",
+              "if (!validSchema) {\r",
+              "    schemaFailures.push({\r",
+              "        errors: validateResult.errors\r",
+              "    });\r",
+              "};\r",
+              "\r",
+              "// -----------------------------\r",
+              "// STORE DATA FOR REQUEST SCRIPTS\r",
+              "// -----------------------------\r",
+              "pm.variables.set(\"jsonData\", JSON.stringify(jsonData));\r",
+              "pm.variables.set(\"schemaFailures\", JSON.stringify(schemaFailures));\r",
+              "\r",
+              "// -----------------------------\r",
+              "// DEBUG LOGGING\r",
+              "// -----------------------------\r",
+              "console.log(`Auth test summary`);\r",
+              "console.log(\"Schema failures:\", schemaFailures);"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Popular lists",
       "item": [
         {
