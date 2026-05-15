@@ -1,5 +1,5 @@
 # API Testing Portfolio
-This project was created to demonstrate my API testing skills using a real public API. The collection was designed by first understanding the API from a user perspective, then examining actual response data to build accurate schemas, rather than relying solely on documentation.
+A Postman collection testing the TMDB REST API, covering authentication, popular lists, detail pages, and search across movie and TV endpoints. This project was created to demonstrate my API testing skills using a real public API. The collection was designed by first understanding the API from a user perspective, then examining actual response data to build accurate schemas, rather than relying solely on documentation.
 
 ## Attribution
 This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.
@@ -40,7 +40,7 @@ The Movie Database (TMDB) is a community-built movie and TV database. This colle
 - Pagination metadata validation.
 - Status code, Content-Type header, and response time validation.
 
-### Page detail
+### Detail pages
 - Schema validation with AJV on movie and TV detail responses.
 - Nested object and array validation.
 - Nullable object validation using `oneOf`.
